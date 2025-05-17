@@ -1,0 +1,38 @@
+.posts-gallery {
+  max-width: 880px;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 17px;
+  row-gap: 21px;
+  margin: auto;
+  margin-top: 50px;
+}
+.posts-gallery__post {
+  max-width: 282px;
+}
+.posts-gallery__image {
+  max-width: 282px;
+  display: block;
+}
+.posts-gallery__box {
+  background: white;
+  border-radius: 0 0 10px 10px;
+}
+.posts-gallery__content {
+  display: flex;
+  max-width: 246px;
+  margin: auto;
+  justify-content: space-between;
+}
+.posts-gallery__text {
+  color: black;
+  background: white;
+  font-weight: 900;
+  font-size: 24px;
+}
+.posts-gallery__like-btn {
+  border: none;
+  background: none;
+  max-width: 21px;
+  padding: 0;
+}
