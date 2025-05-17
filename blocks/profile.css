@@ -3,6 +3,8 @@
   max-width: 880px;
   margin: auto;
   gap: 30px;
+  align-items: center;
+  margin-top: 40px;
 }
 
 .profile__avatar-image {
@@ -10,13 +12,38 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin-top: 40px;
 }
 .profile__info {
 }
 .profile__name {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  font-size: 42px;
+  line-height: 48px;
+  margin: 0;
+}
+.profile__name p {
+  margin: 0;
 }
 .profile__occupation {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  margin-top: 16px;
+  margin-bottom: 0px;
 }
-.profile__add-button {
+.profile__edit-btn {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  margin-left: 18px;
+}
+.profile__add-post-btn {
+  background: none;
+  border: 2px solid white;
+  width: 150px;
+  height: 50px;
+  margin-left: auto;
 }
