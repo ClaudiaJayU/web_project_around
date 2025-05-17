@@ -1,0 +1,18 @@
+.header {
+  max-width: 880px;
+  margin: auto;
+}
+
+.header__logo {
+  width: 173px;
+  margin-top: 45px;
+}
+
+.header__line {
+  max-width: 880px;
+  margin-top: 41px;
+  border: 1px;
+  opacity: 70%;
+  background-color: white;
+  height: 1px;
+}

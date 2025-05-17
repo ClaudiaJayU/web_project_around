@@ -1,0 +1,9 @@
+.page {
+  background-color: black;
+  color: white;
+  margin: auto;
+  font-family: Inter;
+  font-weight: normal;
+  width: 100%;
+  min-height: 100vh;
+}

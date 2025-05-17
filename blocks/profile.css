@@ -1,0 +1,22 @@
+.profile {
+  display: flex;
+  max-width: 880px;
+  margin: auto;
+  gap: 30px;
+}
+
+.profile__avatar-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-top: 40px;
+}
+.profile__info {
+}
+.profile__name {
+}
+.profile__occupation {
+}
+.profile__add-button {
+}
