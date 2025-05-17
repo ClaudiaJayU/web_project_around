@@ -36,3 +36,6 @@
   max-width: 21px;
   padding: 0;
 }
+.posts-gallery__like-btn:hover {
+  opacity: 50%;
+}
