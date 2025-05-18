@@ -30,8 +30,8 @@ function saveFormInfo() {
   profileOccupation.textContent = formOccupation.value;
 }
 
-function closeForm(event) {
-  event.preventDefault();
+function closeForm(evt) {
+  evt.preventDefault();
   popup.classList.remove("active");
 }
 

@@ -16,3 +16,32 @@
   background-color: white;
   height: 1px;
 }
+
+@media only screen and (min-width: 544px) and (max-width: 1024px) {
+  .header {
+    max-width: 600px;
+  }
+  .header__logo {
+    margin-top: 35px;
+    margin-left: 8.4375%;
+  }
+  .header__line {
+    max-width: 600px;
+    margin-top: 38px;
+  }
+}
+
+@media only screen and (max-width: 544px) {
+  .header {
+    max-width: 320px;
+  }
+  .header__logo {
+    margin-top: 28px;
+    width: 126px;
+    margin-left: 8.4375%;
+  }
+  .header__line {
+    width: 100%;
+    margin-top: 38px;
+  }
+}
