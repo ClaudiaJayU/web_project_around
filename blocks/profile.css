@@ -22,7 +22,7 @@
   line-height: 48px;
   margin: 0;
 }
-.profile__name-text p {
+.profile__name-text {
   margin: 0;
 }
 .profile__occupation {
