@@ -44,6 +44,7 @@
   max-width: 358px;
   margin: auto;
   flex-direction: column;
+  align-items: flex-start;
 }
 .popup__title {
   color: black;
@@ -94,7 +95,7 @@
   border-radius: 2px;
 }
 
-.popup__save-btn-active {
+.popup__save-btn.active {
   background-color: black;
   color: white;
   width: 358px;
@@ -106,6 +107,6 @@
   border: none;
   border-radius: 2px;
 }
-.popup__save-btn-active:hover {
+.popup__save-btn.active:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
