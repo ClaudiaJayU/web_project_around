@@ -10,8 +10,10 @@
   max-width: 282px;
 }
 .posts-gallery__image {
-  max-width: 282px;
+  height: 282px;
+  width: 282px;
   display: block;
+  border-radius: 10px 10px 0 0;
 }
 .posts-gallery__box {
   background: white;
@@ -28,7 +30,11 @@
   background: white;
   font-weight: 900;
   font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .posts-gallery__like-btn {
   border: none;
   background: none;
