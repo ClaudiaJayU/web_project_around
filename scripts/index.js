@@ -9,12 +9,11 @@ const profileOccupation = document.querySelector(".profile__occupation");
 const formName = document.querySelector("#user-name-input");
 const formOccupation = document.querySelector("#user-occupation-input");
 const saveButton = document.querySelector("#user-save-btn");
-
-/* const formTitle = postPopup.querySelector(".popup__input-1");
+const sectionPostGallery = document.querySelector(".posts-gallery");
+const templateCard = document.querySelector("#card-template");
+const formTitle = postPopup.querySelector(".popup__input-1");
 const formImg = postPopup.querySelector(".popup__input-2");
-const postTitle = document.querySelector(".posts-gallery__text");
-const postImage = document.querySelector(".posts-gallery__image");
- */
+const postForm = postPopup.querySelector("form");
 
 function showPopup(popupElement) {
   popupElement.classList.add("active");
@@ -103,21 +102,29 @@ const initialCards = [
   },
 ];
 
-function renderCards() {
-  const cards = initialCards.map((card) => {
-    const cardElement = document
-      .querySelector("#card-template")
-      .content.cloneNode(true);
-    cardElement.querySelector(".posts-gallery__image").src = card.link;
-    cardElement.querySelector(".posts-gallery__image").alt =
-      "Foto de " + card.name;
-    cardElement.querySelector(".posts-gallery__text").textContent = card.name;
-    return cardElement;
-  });
-  const container = document.querySelector(".posts-gallery");
-  cards.forEach((cardElement) => {
-    container.append(cardElement);
-  });
+initialCards.forEach(function (item) {
+  createCard(item.name, item.link);
+});
+
+const savePostButton = postPopup.querySelector("#post-save-btn");
+
+function createNewPost(evt) {
+  evt.preventDefault();
+  createCard(formTitle.value, formImg.value);
+  closePostPopup();
+  const lastCard = sectionPostGallery.lastElementChild;
+  sectionPostGallery.prepend(lastCard);
 }
 
-document.addEventListener("DOMContentLoaded", renderCards);
+postForm.addEventListener("submit", createNewPost);
+
+function createCard(text, link) {
+  const card = templateCard.content
+    .querySelector(".posts-gallery__post")
+    .cloneNode(true);
+  const cardText = card.querySelector(".posts-gallery__text");
+  const cardImage = card.querySelector(".posts-gallery__image");
+  cardText.textContent = text;
+  cardImage.src = link;
+  sectionPostGallery.append(card);
+}
