@@ -1,22 +1,50 @@
-let openFormButton = document.querySelector(".profile__edit-btn");
-let closeFormButton = document.querySelector(".popup__close-btn");
-let popup = document.querySelector(".popup");
-let profileName = document.querySelector(".profile__name-text");
-let profileOccupation = document.querySelector(".profile__occupation");
-let formName = document.querySelector(".popup__name");
-let formOccupation = document.querySelector(".popup__occupation");
-let saveButton = document.querySelector(".popup__save-btn");
+const openUserFormButton = document.querySelector(".profile__edit-btn");
+const openPostFormButton = document.querySelector(".profile__add-post-btn");
+const closeUserFormButton = document.querySelector("#popup__user-close-btn");
+const closePostFormButton = document.querySelector("#popup__post-close-btn");
+const userPopup = document.querySelector("#user-popup");
+const postPopup = document.querySelector("#newpost-popup");
+const profileName = document.querySelector(".profile__name-text");
+const profileOccupation = document.querySelector(".profile__occupation");
+const formName = document.querySelector("#user-name-input");
+const formOccupation = document.querySelector("#user-occupation-input");
+const saveButton = document.querySelector("#user-save-btn");
 
-function showPopup() {
-  popup.classList.add("active");
+/* const formTitle = postPopup.querySelector(".popup__input-1");
+const formImg = postPopup.querySelector(".popup__input-2");
+const postTitle = document.querySelector(".posts-gallery__text");
+const postImage = document.querySelector(".posts-gallery__image");
+ */
+
+function showPopup(popupElement) {
+  popupElement.classList.add("active");
 }
-function closePopup() {
-  popup.classList.remove("active");
+
+function closePopup(popupElement) {
+  popupElement.classList.remove("active");
 }
+
+function openUserPopup() {
+  showPopup(userPopup);
+}
+
+function openPostPopup() {
+  showPopup(postPopup);
+}
+
+function closeUserPopup() {
+  closePopup(userPopup);
+}
+
+function closePostPopup() {
+  closePopup(postPopup);
+}
+
 function showCurrentInfo() {
   formName.value = profileName.textContent;
   formOccupation.value = profileOccupation.textContent;
 }
+
 function activeSaveButton() {
   if (formName.value !== "" && formOccupation.value !== "") {
     saveButton.classList.add("active");
@@ -30,14 +58,19 @@ function saveFormInfo() {
   profileOccupation.textContent = formOccupation.value;
 }
 
+function savePostInfo() {}
+
 function closeForm(evt) {
   evt.preventDefault();
-  popup.classList.remove("active");
+  userPopup.classList.remove("active");
 }
 
-openFormButton.addEventListener("click", showPopup);
-closeFormButton.addEventListener("click", closePopup);
-openFormButton.addEventListener("click", showCurrentInfo);
+openUserFormButton.addEventListener("click", openUserPopup);
+openPostFormButton.addEventListener("click", openPostPopup);
+closeUserFormButton.addEventListener("click", closeUserPopup);
+closePostFormButton.addEventListener("click", closePostPopup);
+openUserFormButton.addEventListener("click", showCurrentInfo);
+
 formName.addEventListener("input", activeSaveButton);
 formOccupation.addEventListener("input", activeSaveButton);
 saveButton.addEventListener("click", saveFormInfo);
