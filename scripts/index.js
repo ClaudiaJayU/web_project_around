@@ -122,9 +122,22 @@ function createCard(text, link) {
   const card = templateCard.content
     .querySelector(".posts-gallery__post")
     .cloneNode(true);
+  const likeBtn = card.querySelector(".posts-gallery__like-btn");
+  const likeHeart = likeBtn.querySelector("img");
+  likeBtn.addEventListener("click", function () {
+    like(likeHeart);
+  });
   const cardText = card.querySelector(".posts-gallery__text");
   const cardImage = card.querySelector(".posts-gallery__image");
   cardText.textContent = text;
   cardImage.src = link;
   sectionPostGallery.append(card);
+}
+
+function like(heart) {
+  if (heart.src.includes("like-heart.svg")) {
+    heart.src = "./images/like-heart-active.svg";
+  } else {
+    heart.src = "./images/like-heart.svg";
+  }
 }
