@@ -69,7 +69,6 @@ openPostFormButton.addEventListener("click", openPostPopup);
 closeUserFormButton.addEventListener("click", closeUserPopup);
 closePostFormButton.addEventListener("click", closePostPopup);
 openUserFormButton.addEventListener("click", showCurrentInfo);
-
 formName.addEventListener("input", activeSaveButton);
 formOccupation.addEventListener("input", activeSaveButton);
 saveButton.addEventListener("click", saveFormInfo);
@@ -127,6 +126,12 @@ function createCard(text, link) {
   likeBtn.addEventListener("click", function () {
     like(likeHeart);
   });
+  const deleteBtn = card.querySelector(".post__trash-btn");
+  function deleteCard() {
+    card.remove();
+  }
+
+  deleteBtn.addEventListener("click", deleteCard);
   const cardText = card.querySelector(".posts-gallery__text");
   const cardImage = card.querySelector(".posts-gallery__image");
   cardText.textContent = text;

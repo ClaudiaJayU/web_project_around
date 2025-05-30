@@ -9,6 +9,18 @@
 .posts-gallery__post {
   max-width: 282px;
 }
+.post__trash-btn {
+  background: none;
+  border: none;
+  position: relative;
+  top: 40px;
+  left: 240px;
+}
+
+.post__trash-btn:hover {
+  opacity: 60%;
+}
+
 .posts-gallery__image {
   height: 282px;
   width: 282px;
