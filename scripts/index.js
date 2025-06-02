@@ -14,6 +14,11 @@ const templateCard = document.querySelector("#card-template");
 const formTitle = postPopup.querySelector(".popup__input-1");
 const formImg = postPopup.querySelector(".popup__input-2");
 const postForm = postPopup.querySelector("form");
+/* Variables del pop de la imagen */
+const imgAmpliada = document.querySelector(".img-popup");
+const imgAmpliadaImg = imgAmpliada.querySelector(".img-popup__image");
+const imgAmpliadaTxt = imgAmpliada.querySelector(".img-popup__text");
+const imgAmpliadaClose = imgAmpliada.querySelector(".img-popup__close-btn");
 
 function showPopup(popupElement) {
   popupElement.classList.add("active");
@@ -137,6 +142,16 @@ function createCard(text, link) {
   cardText.textContent = text;
   cardImage.src = link;
   sectionPostGallery.append(card);
+
+  cardImage.addEventListener("click", function () {
+    imgAmpliada.classList.add("active");
+    imgAmpliadaImg.src = cardImage.src;
+    imgAmpliadaTxt.textContent = cardText.textContent;
+  });
+
+  imgAmpliadaClose.addEventListener("click", function () {
+    imgAmpliada.classList.remove("active");
+  });
 }
 
 function like(heart) {
