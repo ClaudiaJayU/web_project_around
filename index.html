@@ -123,16 +123,26 @@
                   placeholder="Título"
                   class="popup__input"
                   id="place-name-input"
+                  required
+                  minlength="2"
+                  maxlength="30"
                 />
+                <div class="popup__input-validation">
+                  <p class="text-error" id="place-name-input-error"></p>
+                </div>
                 <input
                   type="url"
                   name="enlace-imagen"
                   placeholder="Enlace a la imagen"
                   class="popup__input"
                   id="url-input"
+                  required
                 />
+                <div class="popup__input-validation">
+                  <p class="text-error" id="url-input-error"></p>
+                </div>
                 <button
-                  class="popup__save-btn active"
+                  class="popup__save-btn popup__button_disabled"
                   id="post-save-btn"
                   type="submit"
                 >
