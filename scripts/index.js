@@ -11,8 +11,8 @@ const formOccupation = document.querySelector("#user-occupation-input");
 const saveButton = document.querySelector("#user-save-btn");
 const sectionPostGallery = document.querySelector(".posts-gallery");
 const templateCard = document.querySelector("#card-template");
-const formTitle = postPopup.querySelector(".popup__input-1");
-const formImg = postPopup.querySelector(".popup__input-2");
+const formTitle = postPopup.querySelector("#place-name-input");
+const formImg = postPopup.querySelector("#url-input");
 const postForm = postPopup.querySelector("form");
 /* Variables del pop de la imagen */
 const imgAmpliada = document.querySelector(".img-popup");
@@ -51,9 +51,9 @@ function showCurrentInfo() {
 
 function activeSaveButton() {
   if (formName.value !== "" && formOccupation.value !== "") {
-    saveButton.classList.add("active");
+    saveButton.classList.remove("popup__button_disabled");
   } else {
-    saveButton.classList.remove("active");
+    saveButton.classList.add("popup__button_disabled");
   }
 }
 

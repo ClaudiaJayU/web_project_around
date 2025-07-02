@@ -71,18 +71,30 @@
                   type="text"
                   name="name"
                   placeholder="Nombre"
-                  class="popup__input-1"
+                  class="popup__input"
                   id="user-name-input"
+                  required
+                  minlength="2"
+                  maxlength="40"
                 />
+                <div class="popup__input-validation">
+                  <p class="text-error" id="user-name-input-error"></p>
+                </div>
                 <input
                   type="text"
                   name="occupation"
                   placeholder="Acerca de mí"
-                  class="popup__input-2"
+                  class="popup__input"
                   id="user-occupation-input"
+                  required
+                  minlength="2"
+                  maxlength="200"
                 />
+                <div class="popup__input-validation">
+                  <p class="text-error" id="user-occupation-input-error"></p>
+                </div>
                 <button
-                  class="popup__save-btn active"
+                  class="popup__save-btn popup__button_disabled"
                   id="user-save-btn"
                   type="submit"
                 >
@@ -109,14 +121,15 @@
                   type="text"
                   name="name"
                   placeholder="Título"
-                  class="popup__input-1"
+                  class="popup__input"
                   id="place-name-input"
                 />
                 <input
                   type="url"
                   name="enlace-imagen"
                   placeholder="Enlace a la imagen"
-                  class="popup__input-2"
+                  class="popup__input"
+                  id="url-input"
                 />
                 <button
                   class="popup__save-btn active"
@@ -171,5 +184,6 @@
       </div>
     </template>
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/validate.js"></script>
   </body>
 </html>
