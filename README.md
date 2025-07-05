@@ -10,3 +10,7 @@ Plan de mejora: Permitir guardar la información de las nuevas tarjetas y likes 
 
 Enlace a GitHub Pages:
 https://claudiajayu.github.io/web_project_around/
+
+Actualización Proyecto SPrint9:
+
+En este proyecto agregamos validación a los formularios y además añadimos funcionalidades nuevas como que los formularios y las imágenes ampliadas se cierren con la tecla ESC y también haciendo click en el fondo negro fuera del formulario.

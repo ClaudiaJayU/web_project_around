@@ -1,5 +1,5 @@
-const openUserFormButton = document.querySelector(".profile__edit-btn");
-const openPostFormButton = document.querySelector(".profile__add-post-btn");
+const openUserFormButton = document.querySelector("#profile-edit-btn");
+const openPostFormButton = document.querySelector("#add-post-btn");
 const closeUserFormButton = document.querySelector("#popup__user-close-btn");
 const closePostFormButton = document.querySelector("#popup__post-close-btn");
 const userPopup = document.querySelector("#user-popup");
@@ -147,10 +147,12 @@ function createCard(text, link) {
     imgAmpliada.classList.add("active");
     imgAmpliadaImg.src = cardImage.src;
     imgAmpliadaTxt.textContent = cardText.textContent;
+    document.addEventListener("keydown", handleEscape);
   });
 
   imgAmpliadaClose.addEventListener("click", function () {
     imgAmpliada.classList.remove("active");
+    document.removeEventListener("keydown", handleEscape);
   });
 }
 
@@ -161,3 +163,66 @@ function like(heart) {
     heart.src = "./images/like-heart.svg";
   }
 }
+
+/* Código para cerrar modales usando el orden html */
+
+const modals = document.querySelectorAll(".popup");
+const openButtons = document.querySelectorAll(".profile__btn");
+const closeButtons = document.querySelectorAll(".popup__close-btn");
+const saveButtons = document.querySelectorAll(".popup__save-btn");
+
+// Función para abrir un modal específico
+function openModal(modal) {
+  modal.classList.add("active");
+  document.addEventListener("keydown", handleEscape);
+  document.activeElement.blur();
+}
+
+// Función para cerrar un modal específico
+function closeModal(modal) {
+  modal.classList.remove("active");
+  document.removeEventListener("keydown", handleEscape);
+}
+
+// Cerrar con Escape
+function handleEscape(evt) {
+  if (evt.key === "Escape") {
+    const openedModal = document.querySelector(".popup.active");
+    if (openedModal) {
+      closeModal(openedModal);
+    }
+  }
+}
+
+// Cerrar haciendo clic en el overlay
+modals.forEach((modal) => {
+  modal.addEventListener("mousedown", (evt) => {
+    if (evt.target === modal) {
+      closeModal(modal);
+    }
+  });
+});
+
+// Abrir: aquí debes ordenar los botones en el mismo orden que los popups
+openButtons.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    const modal = modals[index];
+    openModal(modal);
+  });
+});
+
+// Cerrar con botón de cerrar (X)
+closeButtons.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    const modal = modals[index];
+    closeModal(modal);
+  });
+});
+
+// Cerrar con botón guardar
+saveButtons.forEach((button, index) => {
+  button.addEventListener("click", () => {
+    const modal = modals[index];
+    closeModal(modal);
+  });
+});
