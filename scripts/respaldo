@@ -19,7 +19,6 @@ const imgAmpliada = document.querySelector(".img-popup");
 const imgAmpliadaImg = imgAmpliada.querySelector(".img-popup__image");
 const imgAmpliadaTxt = imgAmpliada.querySelector(".img-popup__text");
 const imgAmpliadaClose = imgAmpliada.querySelector(".img-popup__close-btn");
-const savePostButton = postPopup.querySelector("#post-save-btn");
 
 function showPopup(popupElement) {
   popupElement.classList.add("active");
@@ -109,25 +108,63 @@ const initialCards = [
   },
 ];
 
-function createCard(text, link) {
-  const card = new Card(text, link, "#card-template");
-  const cardElement = card.generateCard();
-  sectionPostGallery.prepend(cardElement);
-  return cardElement;
-}
+initialCards.forEach(function (item) {
+  createCard(item.name, item.link);
+});
 
-initialCards.forEach((item) => createCard(item.name, item.link));
+const savePostButton = postPopup.querySelector("#post-save-btn");
 
 function createNewPost(evt) {
   evt.preventDefault();
-  const title = formTitle.value;
-  const url = formImg.value;
-  createCard(title, url);
+  createCard(formTitle.value, formImg.value);
   closePostPopup();
-  postForm.reset();
+  const lastCard = sectionPostGallery.lastElementChild;
+  sectionPostGallery.prepend(lastCard);
 }
 
 postForm.addEventListener("submit", createNewPost);
+
+function createCard(text, link) {
+  const card = templateCard.content
+    .querySelector(".posts-gallery__post")
+    .cloneNode(true);
+  const likeBtn = card.querySelector(".posts-gallery__like-btn");
+  const likeHeart = likeBtn.querySelector("img");
+  likeBtn.addEventListener("click", function () {
+    like(likeHeart);
+  });
+  const deleteBtn = card.querySelector(".post__trash-btn");
+  function deleteCard() {
+    card.remove();
+  }
+
+  deleteBtn.addEventListener("click", deleteCard);
+  const cardText = card.querySelector(".posts-gallery__text");
+  const cardImage = card.querySelector(".posts-gallery__image");
+  cardText.textContent = text;
+  cardImage.src = link;
+  sectionPostGallery.append(card);
+
+  cardImage.addEventListener("click", function () {
+    imgAmpliada.classList.add("active");
+    imgAmpliadaImg.src = cardImage.src;
+    imgAmpliadaTxt.textContent = cardText.textContent;
+    document.addEventListener("keydown", handleEscape);
+  });
+
+  imgAmpliadaClose.addEventListener("click", function () {
+    imgAmpliada.classList.remove("active");
+    document.removeEventListener("keydown", handleEscape);
+  });
+}
+
+function like(heart) {
+  if (heart.src.includes("like-heart.svg")) {
+    heart.src = "./images/like-heart-active.svg";
+  } else {
+    heart.src = "./images/like-heart.svg";
+  }
+}
 
 /* Código para cerrar modales usando el orden html */
 
