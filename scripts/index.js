@@ -6,7 +6,12 @@ import {
   openModal,
   closeModal,
   handleEscape,
+  imgAmpliada,
+  imgAmpliadaImg,
+  imgAmpliadaTxt,
 } from "./utils.js";
+
+import { abrirModal, cerrarModal } from "./utils.js";
 const openUserFormButton = document.querySelector("#profile-edit-btn");
 const openPostFormButton = document.querySelector("#add-post-btn");
 const closeUserFormButton = document.querySelector("#popup__user-close-btn");
@@ -24,9 +29,7 @@ const formTitle = postPopup.querySelector("#place-name-input");
 const formImg = postPopup.querySelector("#url-input");
 const postForm = postPopup.querySelector("form");
 /* Variables del pop de la imagen */
-const imgAmpliada = document.querySelector(".img-popup");
-const imgAmpliadaImg = imgAmpliada.querySelector(".img-popup__image");
-const imgAmpliadaTxt = imgAmpliada.querySelector(".img-popup__text");
+
 const imgAmpliadaClose = imgAmpliada.querySelector(".img-popup__close-btn");
 const savePostButton = postPopup.querySelector("#post-save-btn");
 
@@ -154,5 +157,3 @@ forms.forEach((formElement) => {
   const validator = new FormValidator(config, formElement);
   validator.enableValidation();
 });
-
-import { abrirModal, cerrarModal } from "./utils.js";

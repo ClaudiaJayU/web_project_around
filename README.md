@@ -1,16 +1,15 @@
-# Tripleten web_project_around
+Proyecto Sprint 10
 
-Descripción: En esta web recreamos una red social para practicar nuestras primeras interacciones con JavaScript. La página cuenta con la funcionalidad de cambiar el nombre y la ocupación a través de un botón que abre un formulario. Además el sitio es responsivo a diferentes tipos de pantalla. En esta versión mejorara agregamos funcionalidades como:
--Añadir tarjetas nuevas.
--Dar like a los posts.
--Eliminar tarjetas.
--Agrandar las imágenes.
+Descripción
+Este proyecto es una aplicación web que permite a los usuarios gestionar un perfil y publicar imágenes con descripciones. Incluye funcionalidades para agregar, eliminar y dar “like” a publicaciones, así como editar información del perfil. Además, cuenta con validación de formularios y modales para mejorar la experiencia del usuario.
 
-Plan de mejora: Permitir guardar la información de las nuevas tarjetas y likes activos.
+Tecnologías y técnicas utilizadas:
+-HTML5 y CSS3 para la estructura y estilos responsivos.
+-JavaScript modular (ES Modules) para organizar el código en clases y funciones reutilizables.
+-Manejo del DOM para interacción dinámica con el usuario.
+-Validación de formularios personalizada con mensajes de error visibles.
+-Control de modales para abrir y cerrar formularios y vistas ampliadas.
+-Uso de plantillas HTML (<template>) para crear elementos dinámicos.
 
 Enlace a GitHub Pages:
 https://claudiajayu.github.io/web_project_around/
-
-Actualización Proyecto SPrint9:
-
-En este proyecto agregamos validación a los formularios y además añadimos funcionalidades nuevas como que los formularios y las imágenes ampliadas se cierren con la tecla ESC y también haciendo click en el fondo negro fuera del formulario.

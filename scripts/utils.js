@@ -4,6 +4,9 @@ const modals = document.querySelectorAll(".popup");
 const openButtons = document.querySelectorAll(".profile__btn");
 const closeButtons = document.querySelectorAll(".popup__close-btn");
 const saveButtons = document.querySelectorAll(".popup__save-btn");
+const imgAmpliada = document.querySelector(".img-popup");
+const imgAmpliadaImg = imgAmpliada.querySelector(".img-popup__image");
+const imgAmpliadaTxt = imgAmpliada.querySelector(".img-popup__text");
 
 // Función para abrir un modal específico
 function openModal(modal) {
@@ -61,6 +64,14 @@ saveButtons.forEach((button, index) => {
   });
 });
 
+export function abrirModal(id) {
+  document.getElementById(id).classList.add("open");
+}
+
+export function cerrarModal(id) {
+  document.getElementById(id).classList.remove("open");
+}
+
 export {
   modals,
   openButtons,
@@ -69,12 +80,7 @@ export {
   openModal,
   closeModal,
   handleEscape,
+  imgAmpliada,
+  imgAmpliadaImg,
+  imgAmpliadaTxt,
 };
-
-export function abrirModal(id) {
-  document.getElementById(id).classList.add("open");
-}
-
-export function cerrarModal(id) {
-  document.getElementById(id).classList.remove("open");
-}

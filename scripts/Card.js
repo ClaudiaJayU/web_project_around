@@ -1,3 +1,10 @@
+import {
+  openModal,
+  imgAmpliada,
+  imgAmpliadaImg,
+  imgAmpliadaTxt,
+} from "./utils.js";
+
 export class Card {
   constructor(text, link, templateCard) {
     this._text = text;
@@ -37,6 +44,12 @@ export class Card {
     });
     this.deleteBtn.addEventListener("click", () => {
       this.cardElement.remove();
+    });
+    this.cardImage.addEventListener("click", () => {
+      imgAmpliadaImg.src = this._link;
+      imgAmpliadaImg.alt = this._text;
+      imgAmpliadaTxt.textContent = this._text;
+      openModal(imgAmpliada);
     });
   }
 }
