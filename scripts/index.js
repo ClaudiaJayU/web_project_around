@@ -129,6 +129,23 @@ function createNewPost(evt) {
 
 postForm.addEventListener("submit", createNewPost);
 
+const config = {
+  formSelector: ".popup__form", // Selector para los formularios
+  inputSelector: ".popup__input", // Selector para los inputs dentro del formulario
+  submitButtonSelector: ".popup__save-btn", // Selector para el botón submit dentro del formulario
+  inactiveButtonClass: "popup__button_disabled", // Clase que se agrega al botón para mostrarlo deshabilitado
+  inputErrorClass: "popup__input_type_error", // Clase que se agrega al input inválido para marcarlo
+  errorClass: "popup__error_visible", // Clase que se agrega al mensaje de error para mostrarlo
+};
+
+import { FormValidator } from "./FormValidator.js";
+
+const forms = document.querySelectorAll(config.formSelector);
+forms.forEach((formElement) => {
+  const validator = new FormValidator(config, formElement);
+  validator.enableValidation();
+});
+
 /* Código para cerrar modales usando el orden html */
 
 const modals = document.querySelectorAll(".popup");

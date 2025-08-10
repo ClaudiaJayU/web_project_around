@@ -228,3 +228,8 @@ saveButtons.forEach((button, index) => {
     closeModal(modal);
   });
 });
+
+id = "user-name-input";
+id = "user-occupation-input";
+id = "place-name-input";
+id = "url-input";
