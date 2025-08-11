@@ -14,6 +14,7 @@ import { abrirModal, cerrarModal } from "../utils/utils.js";
 import Section from "../components/Section.js";
 import { Card } from "../components/Card.js";
 import { FormValidator } from "../components/FormValidator.js";
+import Popup from "../components/Popup.js";
 
 const openUserFormButton = document.querySelector("#profile-edit-btn");
 const openPostFormButton = document.querySelector("#add-post-btn");
@@ -34,29 +35,17 @@ const postForm = postPopup.querySelector("form");
 const imgAmpliadaClose = imgAmpliada.querySelector(".img-popup__close-btn");
 const savePostButton = postPopup.querySelector("#post-save-btn");
 
-function showPopup(popupElement) {
-  popupElement.classList.add("active");
-}
+const popupUser = new Popup("#user-popup");
+popupUser.setEventListeners();
+document.querySelector("#profile-edit-btn").addEventListener("click", () => {
+  popupUser.open();
+});
 
-function closePopup(popupElement) {
-  popupElement.classList.remove("active");
-}
-
-function openUserPopup() {
-  showPopup(userPopup);
-}
-
-function openPostPopup() {
-  showPopup(postPopup);
-}
-
-function closeUserPopup() {
-  closePopup(userPopup);
-}
-
-function closePostPopup() {
-  closePopup(postPopup);
-}
+const popupNewPost = new Popup("#newpost-popup");
+popupNewPost.setEventListeners();
+document.querySelector("#add-post-btn").addEventListener("click", () => {
+  popupNewPost.open();
+});
 
 function showCurrentInfo() {
   formName.value = profileName.textContent;
@@ -76,22 +65,9 @@ function saveFormInfo() {
   profileOccupation.textContent = formOccupation.value;
 }
 
-function savePostInfo() {}
-
-function closeForm(evt) {
-  evt.preventDefault();
-  userPopup.classList.remove("active");
-}
-
-openUserFormButton.addEventListener("click", openUserPopup);
-openPostFormButton.addEventListener("click", openPostPopup);
-closeUserFormButton.addEventListener("click", closeUserPopup);
-closePostFormButton.addEventListener("click", closePostPopup);
-openUserFormButton.addEventListener("click", showCurrentInfo);
 formName.addEventListener("input", activeSaveButton);
 formOccupation.addEventListener("input", activeSaveButton);
 saveButton.addEventListener("click", saveFormInfo);
-saveButton.addEventListener("click", closeForm);
 
 const initialCards = [
   {
@@ -141,7 +117,6 @@ function createNewPost(evt) {
   const card = new Card(title, url, "#card-template");
   const cardElement = card.generateCard();
   section.addItem(cardElement); // Usamos la sección para agregar
-  closePostPopup();
   postForm.reset();
 }
 postForm.addEventListener("submit", createNewPost);
