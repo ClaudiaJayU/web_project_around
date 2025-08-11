@@ -3,7 +3,7 @@ import {
   imgAmpliada,
   imgAmpliadaImg,
   imgAmpliadaTxt,
-} from "./utils.js";
+} from "../utils/utils.js";
 
 export class Card {
   constructor(text, link, templateCard) {

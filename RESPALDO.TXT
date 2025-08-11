@@ -9,9 +9,10 @@ import {
   imgAmpliada,
   imgAmpliadaImg,
   imgAmpliadaTxt,
-} from "./utils.js";
+} from "../utils/utils.js";
 
-import { abrirModal, cerrarModal } from "./utils.js";
+import { abrirModal, cerrarModal } from "../utils/utils.js";
+
 const openUserFormButton = document.querySelector("#profile-edit-btn");
 const openPostFormButton = document.querySelector("#add-post-btn");
 const closeUserFormButton = document.querySelector("#popup__user-close-btn");
@@ -92,7 +93,7 @@ formOccupation.addEventListener("input", activeSaveButton);
 saveButton.addEventListener("click", saveFormInfo);
 saveButton.addEventListener("click", closeForm);
 
-import { Card } from "./Card.js";
+import { Card } from "../components/Card.js";
 
 const initialCards = [
   {
@@ -150,7 +151,7 @@ const config = {
   errorClass: "popup__error_visible", // Clase que se agrega al mensaje de error para mostrarlo
 };
 
-import { FormValidator } from "./FormValidator.js";
+import { FormValidator } from "../components/FormValidator.js";
 
 const forms = document.querySelectorAll(config.formSelector);
 forms.forEach((formElement) => {
