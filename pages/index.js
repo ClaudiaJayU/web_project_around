@@ -5,8 +5,8 @@ import Popup from "../components/Popup.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import FormValidator from "../components/FormValidator.js";
-
-// Datos iniciales
+import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
 
 const initialCards = [
   {
@@ -35,15 +35,6 @@ const initialCards = [
   },
 ];
 
-// Selectores y variables
-
-const postPopup = document.querySelector("#newpost-popup");
-const formTitle = postPopup.querySelector("#place-name-input");
-const formImg = postPopup.querySelector("#url-input");
-const postForm = postPopup.querySelector("form");
-
-// Configuración de validación
-
 const config = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -53,8 +44,6 @@ const config = {
   errorClass: "popup__error_visible",
 };
 
-// Inicialización de popups
-
 const popupWithImage = new PopupWithImage("#img-popup");
 popupWithImage.setEventListeners();
 
@@ -63,8 +52,6 @@ popupUser.setEventListeners();
 
 const popupNewPost = new Popup("#newpost-popup");
 popupNewPost.setEventListeners();
-
-// Inicialización de la sección de tarjetas
 
 const section = new Section(
   {
@@ -85,34 +72,55 @@ const section = new Section(
 
 section.renderItems();
 
-// Funciones
-
-function createNewPost(evt) {
-  evt.preventDefault();
-  const title = formTitle.value;
-  const url = formImg.value;
-  const card = new Card(title, url, "#card-template", popupWithImage);
-  const cardElement = card.generateCard();
-  section.addItem(cardElement);
-  postForm.reset();
+function createNewPost({ title, link }) {
+  const card = new Card(title, link, "#card-template", popupWithImage);
+  return card.generateCard();
 }
-
-// Eventos
-
-postForm.addEventListener("submit", createNewPost);
-
-document.querySelector("#profile-edit-btn").addEventListener("click", () => {
-  popupUser.open();
-});
-
-document.querySelector("#add-post-btn").addEventListener("click", () => {
-  popupNewPost.open();
-});
-
-// Inicialización de validadores
+const editProfileButton = document.querySelector("#profile-edit-btn");
+const addCardButton = document.querySelector("#add-post-btn");
 
 const forms = document.querySelectorAll(config.formSelector);
 forms.forEach((formElement) => {
   const validator = new FormValidator(config, formElement);
   validator.enableValidation();
+});
+
+const formName = document.querySelector("#user-name-input");
+const formOccupation = document.querySelector("#user-occupation-input");
+
+const userInfo = new UserInfo({
+  nameSelector: ".profile__name-text",
+  occupationSelector: ".profile__occupation",
+});
+
+editProfileButton.addEventListener("click", () => {
+  const currentUserInfo = userInfo.getUserInfo();
+  formName.value = currentUserInfo.name;
+  formOccupation.value = currentUserInfo.occupation;
+  editProfilePopup.open();
+});
+
+// Instancia PopupWithForm para editar perfil
+const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
+  userInfo.setUserInfo({
+    name: formData.name,
+    occupation: formData.occupation,
+  });
+  editProfilePopup.close();
+});
+
+editProfilePopup.setEventListeners();
+
+const addCardPopup = new PopupWithForm("#newpost-popup", (formData) => {
+  console.log(formData);
+  const { title, link } = formData;
+  const cardElement = createNewPost({ title, link });
+  section.addItem(cardElement);
+  addCardPopup.close();
+});
+
+addCardPopup.setEventListeners();
+
+addCardButton.addEventListener("click", () => {
+  addCardPopup.open();
 });
