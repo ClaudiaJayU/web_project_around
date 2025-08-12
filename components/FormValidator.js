@@ -1,4 +1,4 @@
-export class FormValidator {
+export default class FormValidator {
   // Constructor recibe la configuración y el formulario sobre el que actuará
   constructor(config, formElement) {
     this._config = config; // Guarda la configuración recibida

@@ -5,11 +5,14 @@ import {
   imgAmpliadaTxt,
 } from "../utils/utils.js";
 
-export class Card {
-  constructor(text, link, templateCard) {
+import PopupWithImage from "./PopupWithImage.js";
+
+export default class Card {
+  constructor(text, link, templateCard, popupWithImage) {
     this._text = text;
     this._link = link;
     this._templateCard = templateCard;
+    this._popupWithImage = popupWithImage;
   }
   _getCardElement() {
     const cardElement = document
@@ -30,6 +33,8 @@ export class Card {
     this.cardImage = this.cardElement.querySelector(".posts-gallery__image");
     this.cardText.textContent = this._text;
     this.cardImage.src = this._link;
+    this.cardImage.alt = this._text;
+
     this._setEventListeners();
     return this.cardElement;
   }
@@ -42,14 +47,14 @@ export class Card {
         this.likeHeart.src = "./images/like-heart.svg";
       }
     });
+
     this.deleteBtn.addEventListener("click", () => {
       this.cardElement.remove();
     });
+
+    // Aquí abrimos la imagen ampliada usando popupWithImage
     this.cardImage.addEventListener("click", () => {
-      imgAmpliadaImg.src = this._link;
-      imgAmpliadaImg.alt = this._text;
-      imgAmpliadaTxt.textContent = this._text;
-      openModal(imgAmpliada);
+      this._popupWithImage.open(this._text, this._link);
     });
   }
 }

@@ -1,73 +1,12 @@
-import {
-  modals,
-  openButtons,
-  closeButtons,
-  saveButtons,
-  openModal,
-  closeModal,
-  handleEscape,
-  imgAmpliada,
-  imgAmpliadaImg,
-  imgAmpliadaTxt,
-} from "../utils/utils.js";
-import { abrirModal, cerrarModal } from "../utils/utils.js";
+// Imports
+
 import Section from "../components/Section.js";
-import { Card } from "../components/Card.js";
-import { FormValidator } from "../components/FormValidator.js";
 import Popup from "../components/Popup.js";
+import Card from "../components/Card.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import FormValidator from "../components/FormValidator.js";
 
-const openUserFormButton = document.querySelector("#profile-edit-btn");
-const openPostFormButton = document.querySelector("#add-post-btn");
-const closeUserFormButton = document.querySelector("#popup__user-close-btn");
-const closePostFormButton = document.querySelector("#popup__post-close-btn");
-const userPopup = document.querySelector("#user-popup");
-const postPopup = document.querySelector("#newpost-popup");
-const profileName = document.querySelector(".profile__name-text");
-const profileOccupation = document.querySelector(".profile__occupation");
-const formName = document.querySelector("#user-name-input");
-const formOccupation = document.querySelector("#user-occupation-input");
-const saveButton = document.querySelector("#user-save-btn");
-const formTitle = postPopup.querySelector("#place-name-input");
-const formImg = postPopup.querySelector("#url-input");
-const postForm = postPopup.querySelector("form");
-/* Variables del pop de la imagen */
-
-const imgAmpliadaClose = imgAmpliada.querySelector(".img-popup__close-btn");
-const savePostButton = postPopup.querySelector("#post-save-btn");
-
-const popupUser = new Popup("#user-popup");
-popupUser.setEventListeners();
-document.querySelector("#profile-edit-btn").addEventListener("click", () => {
-  popupUser.open();
-});
-
-const popupNewPost = new Popup("#newpost-popup");
-popupNewPost.setEventListeners();
-document.querySelector("#add-post-btn").addEventListener("click", () => {
-  popupNewPost.open();
-});
-
-function showCurrentInfo() {
-  formName.value = profileName.textContent;
-  formOccupation.value = profileOccupation.textContent;
-}
-
-function activeSaveButton() {
-  if (formName.value !== "" && formOccupation.value !== "") {
-    saveButton.classList.remove("popup__button_disabled");
-  } else {
-    saveButton.classList.add("popup__button_disabled");
-  }
-}
-
-function saveFormInfo() {
-  profileName.textContent = formName.value;
-  profileOccupation.textContent = formOccupation.value;
-}
-
-formName.addEventListener("input", activeSaveButton);
-formOccupation.addEventListener("input", activeSaveButton);
-saveButton.addEventListener("click", saveFormInfo);
+// Datos iniciales
 
 const initialCards = [
   {
@@ -96,11 +35,47 @@ const initialCards = [
   },
 ];
 
+// Selectores y variables
+
+const postPopup = document.querySelector("#newpost-popup");
+const formTitle = postPopup.querySelector("#place-name-input");
+const formImg = postPopup.querySelector("#url-input");
+const postForm = postPopup.querySelector("form");
+
+// Configuración de validación
+
+const config = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__save-btn",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+// Inicialización de popups
+
+const popupWithImage = new PopupWithImage("#img-popup");
+popupWithImage.setEventListeners();
+
+const popupUser = new Popup("#user-popup");
+popupUser.setEventListeners();
+
+const popupNewPost = new Popup("#newpost-popup");
+popupNewPost.setEventListeners();
+
+// Inicialización de la sección de tarjetas
+
 const section = new Section(
   {
     items: initialCards,
     renderer: (item) => {
-      const card = new Card(item.name, item.link, "#card-template");
+      const card = new Card(
+        item.name,
+        item.link,
+        "#card-template",
+        popupWithImage
+      );
       const cardElement = card.generateCard();
       section.addItem(cardElement);
     },
@@ -110,25 +85,31 @@ const section = new Section(
 
 section.renderItems();
 
+// Funciones
+
 function createNewPost(evt) {
   evt.preventDefault();
   const title = formTitle.value;
   const url = formImg.value;
-  const card = new Card(title, url, "#card-template");
+  const card = new Card(title, url, "#card-template", popupWithImage);
   const cardElement = card.generateCard();
-  section.addItem(cardElement); // Usamos la sección para agregar
+  section.addItem(cardElement);
   postForm.reset();
 }
+
+// Eventos
+
 postForm.addEventListener("submit", createNewPost);
 
-const config = {
-  formSelector: ".popup__form", // Selector para los formularios
-  inputSelector: ".popup__input", // Selector para los inputs dentro del formulario
-  submitButtonSelector: ".popup__save-btn", // Selector para el botón submit dentro del formulario
-  inactiveButtonClass: "popup__button_disabled", // Clase que se agrega al botón para mostrarlo deshabilitado
-  inputErrorClass: "popup__input_type_error", // Clase que se agrega al input inválido para marcarlo
-  errorClass: "popup__error_visible", // Clase que se agrega al mensaje de error para mostrarlo
-};
+document.querySelector("#profile-edit-btn").addEventListener("click", () => {
+  popupUser.open();
+});
+
+document.querySelector("#add-post-btn").addEventListener("click", () => {
+  popupNewPost.open();
+});
+
+// Inicialización de validadores
 
 const forms = document.querySelectorAll(config.formSelector);
 forms.forEach((formElement) => {
