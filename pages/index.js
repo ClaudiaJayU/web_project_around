@@ -100,7 +100,6 @@ editProfileButton.addEventListener("click", () => {
   editProfilePopup.open();
 });
 
-// Instancia PopupWithForm para editar perfil
 const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
   userInfo.setUserInfo({
     name: formData.name,

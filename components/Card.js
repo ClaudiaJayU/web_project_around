@@ -1,18 +1,9 @@
-import {
-  openModal,
-  imgAmpliada,
-  imgAmpliadaImg,
-  imgAmpliadaTxt,
-} from "../utils/utils.js";
-
-import PopupWithImage from "./PopupWithImage.js";
-
 export default class Card {
-  constructor(text, link, templateCard, popupWithImage) {
+  constructor(text, link, templateCard, handleCardClick) {
     this._text = text;
     this._link = link;
     this._templateCard = templateCard;
-    this._popupWithImage = popupWithImage;
+    this._handleCardClick = handleCardClick;
   }
   _getCardElement() {
     const cardElement = document
@@ -52,9 +43,8 @@ export default class Card {
       this.cardElement.remove();
     });
 
-    // Aquí abrimos la imagen ampliada usando popupWithImage
     this.cardImage.addEventListener("click", () => {
-      this._popupWithImage.open(this._text, this._link);
+      this._handleCardClick.open(this._text, this._link);
     });
   }
 }
