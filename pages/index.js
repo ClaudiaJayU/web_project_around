@@ -7,33 +7,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-
-const initialCards = [
-  {
-    name: "Valle de Yosemite",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg",
-  },
-  {
-    name: "Lago Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg",
-  },
-  {
-    name: "Montañas Calvas",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg",
-  },
-  {
-    name: "Latemar",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg",
-  },
-  {
-    name: "Parque Nacional de la Vanoise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg",
-  },
-  {
-    name: "Lago di Braies",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg",
-  },
-];
+import { api } from "../components/Api.js"; //entre llaves porque es una instancia exportada, no una clase
 
 const config = {
   formSelector: ".popup__form",
@@ -53,29 +27,56 @@ popupUser.setEventListeners();
 const popupNewPost = new Popup("#newpost-popup");
 popupNewPost.setEventListeners();
 
-const section = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const card = new Card(
-        item.name,
-        item.link,
-        "#card-template",
-        popupWithImage
-      );
-      const cardElement = card.generateCard();
-      section.addItem(cardElement);
-    },
-  },
-  ".posts-gallery"
-);
-
-section.renderItems();
+api
+  .getInitialCards()
+  .then(function (initialCards) {
+    console.log(initialCards);
+    const section = new Section(
+      {
+        items: initialCards,
+        renderer: (item) => {
+          const card = new Card(
+            item.name,
+            item.link,
+            "#card-template",
+            popupWithImage
+          );
+          const cardElement = card.generateCard();
+          section.addItem(cardElement);
+        },
+      },
+      ".posts-gallery"
+    );
+    section.renderItems();
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 function createNewPost({ title, link }) {
   const card = new Card(title, link, "#card-template", popupWithImage);
   return card.generateCard();
 }
+
+api
+  .getUserInfo()
+  .then((userData) => {
+    console.log("📌 Datos de la API:", userData); // <--- prueba
+    const userInfo = new UserInfo({
+      nameSelector: ".profile__name-text",
+      occupationSelector: ".profile__occupation",
+      avatarSelector: ".profile__avatar-image",
+    });
+    userInfo.setUserInfo({
+      name: userData.name,
+      about: userData.about,
+      avatar: userData.avatar, // <- nuevo
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
 const editProfileButton = document.querySelector("#profile-edit-btn");
 const addCardButton = document.querySelector("#add-post-btn");
 
@@ -87,11 +88,6 @@ forms.forEach((formElement) => {
 
 const formName = document.querySelector("#user-name-input");
 const formOccupation = document.querySelector("#user-occupation-input");
-
-const userInfo = new UserInfo({
-  nameSelector: ".profile__name-text",
-  occupationSelector: ".profile__occupation",
-});
 
 editProfileButton.addEventListener("click", () => {
   const currentUserInfo = userInfo.getUserInfo();
