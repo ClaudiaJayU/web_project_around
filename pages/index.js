@@ -117,13 +117,24 @@ const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
 });
 
 editProfilePopup.setEventListeners();
-
 const addCardPopup = new PopupWithForm("#newpost-popup", (formData) => {
-  console.log(formData);
-  const { title, link } = formData;
-  const cardElement = createNewPost({ title, link });
-  section.addItem(cardElement);
-  addCardPopup.close();
+  addCardPopup.renderLoading(true); // Cambia el botón a "Guardando..."
+
+  api
+    .addCard({
+      name: formData.title, // asegúrate que coincida con los names de tus inputs
+      link: formData.link,
+    })
+    .then((newCard) => {
+      const cardElement = createNewPost({
+        title: newCard.name,
+        link: newCard.link,
+      });
+      section.addItem(cardElement); // agrega al principio del DOM
+      addCardPopup.close();
+    })
+    .catch((err) => console.log("❌ Error al agregar tarjeta:", err))
+    .then(() => addCardPopup.renderLoading(false)); // vuelve a "Crear"
 });
 addCardPopup.setEventListeners();
 
