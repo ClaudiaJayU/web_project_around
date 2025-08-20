@@ -6,6 +6,8 @@ export default class PopupWithForm extends Popup {
     this._handleFormSubmit = handleFormSubmit;
     this._form = this._popup.querySelector("form");
     this._inputList = this._form.querySelectorAll("input");
+    this._submitButton = this._form.querySelector(".popup__save-btn");
+    this._submitButtonText = this._submitButton.textContent; // guardamos el texto original
   }
 
   _getInputValues() {
@@ -27,5 +29,14 @@ export default class PopupWithForm extends Popup {
   close() {
     super.close();
     this._form.reset();
+  }
+  // 👇 Nuevo: mostrar cargando
+  renderLoading(isLoading, loadingText = "Guardando...") {
+    console.log("🔄 renderLoading llamado con:", isLoading);
+    if (isLoading) {
+      this._submitButton.textContent = loadingText;
+    } else {
+      this._submitButton.textContent = this._submitButtonText;
+    }
   }
 }

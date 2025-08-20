@@ -4,6 +4,13 @@ class Api {
     this._baseUrl = options.baseUrl;
     this._headers = options.headers;
   }
+
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`❌ Error: ${res.status}`);
+  }
   getUserInfo() {
     /* da como resultado una promesa */
     return fetch(`${this._baseUrl}/users/me`, {
@@ -31,6 +38,16 @@ class Api {
   }
 
   // otros métodos para trabajar con la API
+  setUserInfo({ name, about }) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        about: about,
+      }),
+    }).then(this._checkResponse);
+  }
 }
 
 export const api = new Api({
