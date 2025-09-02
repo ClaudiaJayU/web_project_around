@@ -6,7 +6,11 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-import { api } from "../components/Api.js"; // entre llaves porque es una instancia exportada, no una clase
+import { api } from "../components/Api.js"; // instancia de la API
+
+// ---------------- VARIABLES GLOBALES ----------------
+let section;
+let currentUserId = null;
 
 // ---------------- CONFIG ----------------
 const config = {
@@ -28,60 +32,49 @@ popupUser.setEventListeners();
 const popupNewPost = new Popup("#newpost-popup");
 popupNewPost.setEventListeners();
 
-// Instancia de UserInfo (fuera del then para poder reutilizarla)
 const userInfo = new UserInfo({
   nameSelector: ".profile__name-text",
   aboutSelector: ".profile__about",
   avatarSelector: ".profile__avatar-image",
 });
 
-// Instancia de Section (también debe ser accesible en addCardPopup)
-let section;
-
 // ---------------- API CALLS ----------------
-api
-  .getInitialCards()
-  .then(function (initialCards) {
-    console.log(initialCards);
-    section = new Section(
-      {
-        items: initialCards,
-        renderer: (item) => {
-          const card = new Card(
-            item.name,
-            item.link,
-            "#card-template",
-            popupWithImage
-          );
-          const cardElement = card.generateCard();
-          section.addItem(cardElement);
-        },
-      },
-      ".posts-gallery"
-    );
-    section.renderItems();
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, initialCards]) => {
+    currentUserId = userData._id;
 
-api
-  .getUserInfo()
-  .then((userData) => {
-    console.log("📌 Datos de la API:", userData);
+    // Setea datos del perfil en el DOM
     userInfo.setUserInfo({
       name: userData.name,
       about: userData.about,
       avatar: userData.avatar,
     });
+
+    // Renderiza tarjetas
+    section = new Section(
+      {
+        items: initialCards,
+        renderer: (item) => {
+          const cardElement = createNewPost(item);
+          section.addItem(cardElement);
+        },
+      },
+      ".posts-gallery"
+    );
+
+    section.renderItems();
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch((err) => console.log("❌ Error en carga inicial:", err));
 
 // ---------------- HELPERS ----------------
-function createNewPost({ title, link }) {
-  const card = new Card(title, link, "#card-template", popupWithImage);
+function createNewPost(cardData) {
+  const card = new Card(
+    cardData, // objeto completo de la API
+    "#card-template", // template selector
+    popupWithImage, // popup de imagen
+    currentUserId // ID del usuario actual
+  );
+
   return card.generateCard();
 }
 
@@ -94,59 +87,45 @@ forms.forEach((formElement) => {
 
 // ---------------- POPUPS ----------------
 const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
-  editProfilePopup.renderLoading(true); // 👉 muestra "Guardando..."
+  editProfilePopup.renderLoading(true);
   api
-    .setUserInfo({
-      name: formData.name,
-      about: formData.about,
-    })
+    .setUserInfo({ name: formData.name, about: formData.about })
     .then((updatedUser) => {
       userInfo.setUserInfo({
         name: updatedUser.name,
         about: updatedUser.about,
-        avatar: updatedUser.avatar, // opcional
+        avatar: updatedUser.avatar,
       });
       editProfilePopup.close();
     })
-    .catch((err) => {
-      console.log("❌ Error al actualizar usuario:", err);
-    })
-    .then(() => {
-      editProfilePopup.renderLoading(false); // 👉 vuelve a "Guardar"
-    });
+    .catch((err) => console.log("❌ Error al actualizar usuario:", err))
+    .finally(() => editProfilePopup.renderLoading(false));
 });
-
 editProfilePopup.setEventListeners();
+
 const addCardPopup = new PopupWithForm("#newpost-popup", (formData) => {
-  addCardPopup.renderLoading(true); // Cambia el botón a "Guardando..."
+  addCardPopup.renderLoading(true);
 
   api
-    .addCard({
-      name: formData.title, // asegúrate que coincida con los names de tus inputs
-      link: formData.link,
-    })
+    .addCard({ name: formData.title, link: formData.link })
     .then((newCard) => {
-      const cardElement = createNewPost({
-        title: newCard.name,
-        link: newCard.link,
-      });
-      section.addItem(cardElement); // agrega al principio del DOM
+      const cardElement = createNewPost(newCard);
+      section.addItem(cardElement);
       addCardPopup.close();
     })
     .catch((err) => console.log("❌ Error al agregar tarjeta:", err))
-    .then(() => addCardPopup.renderLoading(false)); // vuelve a "Crear"
+    .finally(() => addCardPopup.renderLoading(false));
 });
 addCardPopup.setEventListeners();
 
 // ---------------- BOTONES ----------------
 const editProfileButton = document.querySelector("#profile-edit-btn");
 const addCardButton = document.querySelector("#add-post-btn");
-
 const formName = document.querySelector("#user-name-input");
 const formAbout = document.querySelector("#user-about-input");
 
 editProfileButton.addEventListener("click", () => {
-  const currentUser = userInfo.getUserInfo(); // acá era el error, usabas "currentUserInfo"
+  const currentUser = userInfo.getUserInfo();
   formName.value = currentUser.name;
   formAbout.value = currentUser.about;
   editProfilePopup.open();

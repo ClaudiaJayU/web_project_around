@@ -1,50 +1,91 @@
+import { api } from "./Api.js";
+
 export default class Card {
-  constructor(text, link, templateCard, handleCardClick) {
-    this._text = text;
-    this._link = link;
-    this._templateCard = templateCard;
+  constructor(data, templateSelector, handleCardClick, currentUserId) {
+    this._name = data.name;
+    this._link = data.link;
+    this._id = data._id;
+    this._ownerId = data.owner; // ahora owner es string según tu API
+    this._isLiked = data.isLiked || false; // booleano
+    this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    this._currentUserId = currentUserId;
   }
-  _getCardElement() {
-    const cardElement = document
-      .querySelector(this._templateCard)
+
+  // Clona el template
+  _getTemplate() {
+    return document
+      .querySelector(this._templateSelector)
       .content.querySelector(".posts-gallery__post")
       .cloneNode(true);
-    return cardElement;
   }
-  /* Esta función no es privada, ya que accederemos a ella fuera de la Clase */
-  generateCard() {
-    this.cardElement = this._getCardElement();
-    this.likeBtn = this.cardElement.querySelector(".posts-gallery__like-btn");
-    this.likeHeart = this.cardElement.querySelector(
-      ".posts-gallery__like-btn img"
-    );
-    this.deleteBtn = this.cardElement.querySelector(".post__trash-btn");
-    this.cardText = this.cardElement.querySelector(".posts-gallery__text");
-    this.cardImage = this.cardElement.querySelector(".posts-gallery__image");
-    this.cardText.textContent = this._text;
-    this.cardImage.src = this._link;
-    this.cardImage.alt = this._text;
 
+  // Genera la tarjeta y renderiza estado inicial
+  generateCard() {
+    this._element = this._getTemplate();
+
+    this.likeBtn = this._element.querySelector(".posts-gallery__like-btn");
+    this.likeHeart = this.likeBtn.querySelector("img");
+    this.deleteBtn = this._element.querySelector(".post__trash-btn");
+    this.cardText = this._element.querySelector(".posts-gallery__text");
+    this.cardImage = this._element.querySelector(".posts-gallery__image");
+
+    this.cardText.textContent = this._name;
+    this.cardImage.src = this._link;
+    this.cardImage.alt = this._name;
+
+    this._renderLikeState();
     this._setEventListeners();
-    return this.cardElement;
+
+    return this._element;
   }
-  /* Esta función si es privada, ya que sólo la necesitamos dentro de la clase */
+
+  // Devuelve true si el usuario actual ya dio like
+  _isLikedByMe() {
+    return this._isLiked;
+  }
+
+  // Actualiza el DOM del corazón según estado
+  _renderLikeState() {
+    if (this._isLikedByMe()) {
+      this.likeHeart.src = "./images/like-heart-active.svg";
+    } else {
+      this.likeHeart.src = "./images/like-heart.svg";
+    }
+  }
+
+  // Eventos de la tarjeta
   _setEventListeners() {
+    // Like
     this.likeBtn.addEventListener("click", () => {
-      if (this.likeHeart.src.includes("like-heart.svg")) {
-        this.likeHeart.src = "./images/like-heart-active.svg";
+      if (this._isLikedByMe()) {
+        api
+          .unlikeCard(this._id)
+          .then((updatedCard) => {
+            this._isLiked = updatedCard.isLiked;
+            this._renderLikeState();
+          })
+          .catch((err) => console.log("❌ Error al quitar like:", err));
       } else {
-        this.likeHeart.src = "./images/like-heart.svg";
+        api
+          .likeCard(this._id)
+          .then((updatedCard) => {
+            this._isLiked = updatedCard.isLiked;
+            this._renderLikeState();
+          })
+          .catch((err) => console.log("❌ Error al dar like:", err));
       }
     });
 
+    // Eliminar (solo del DOM por ahora)
     this.deleteBtn.addEventListener("click", () => {
-      this.cardElement.remove();
+      this._element.remove();
+      this._element = null;
     });
 
+    // Abrir imagen en popup
     this.cardImage.addEventListener("click", () => {
-      this._handleCardClick.open(this._text, this._link);
+      this._handleCardClick.open(this._name, this._link);
     });
   }
 }
