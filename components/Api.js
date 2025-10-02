@@ -72,6 +72,15 @@ class Api {
       headers: this._headers,
     }).then(this._checkResponse);
   }
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    }).then((res) => {
+      if (!res.ok) return Promise.reject(`Error: ${res.status}`);
+      return res.status === 204 ? {} : res.json();
+    });
+  }
 }
 
 export const api = new Api({

@@ -1,7 +1,13 @@
 import { api } from "./Api.js";
 
 export default class Card {
-  constructor(data, templateSelector, handleCardClick, currentUserId) {
+  constructor(
+    data,
+    templateSelector,
+    handleCardClick,
+    handleDeleteCard,
+    currentUserId
+  ) {
     this._name = data.name;
     this._link = data.link;
     this._id = data._id;
@@ -9,6 +15,7 @@ export default class Card {
     this._isLiked = data.isLiked || false; // booleano
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    this._handleDeleteCard = handleDeleteCard;
     this._currentUserId = currentUserId;
   }
 
@@ -33,6 +40,10 @@ export default class Card {
     this.cardText.textContent = this._name;
     this.cardImage.src = this._link;
     this.cardImage.alt = this._name;
+
+    if (this._ownerId !== this._currentUserId) {
+      this.deleteBtn.style.display = "none";
+    }
 
     this._renderLikeState();
     this._setEventListeners();
@@ -77,10 +88,8 @@ export default class Card {
       }
     });
 
-    // Eliminar (solo del DOM por ahora)
     this.deleteBtn.addEventListener("click", () => {
-      this._element.remove();
-      this._element = null;
+      this._handleDeleteCard(this._id, this._element);
     });
 
     // Abrir imagen en popup

@@ -67,11 +67,21 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
   .catch((err) => console.log("❌ Error en carga inicial:", err));
 
 // ---------------- HELPERS ----------------
+function handleDeleteCard(cardId, cardElement) {
+  api
+    .deleteCard(cardId) // llama a la API para eliminar
+    .then(() => {
+      cardElement.remove(); // elimina del DOM
+    })
+    .catch((err) => console.log("❌ Error al eliminar tarjeta:", err));
+}
+
 function createNewPost(cardData) {
   const card = new Card(
     cardData, // objeto completo de la API
     "#card-template", // template selector
-    popupWithImage, // popup de imagen
+    popupWithImage,
+    handleDeleteCard, // popup de imagen
     currentUserId // ID del usuario actual
   );
 
