@@ -1,37 +1,44 @@
-# Proyecto Sprint 11 - Web Project Around
+# Proyecto Sprint 12 - Web Project Around
 
-Este proyecto continúa el desarrollo del repositorio **web_project_around** y se centra en la refactorización del código mediante la creación y acoplamiento de clases orientadas a objetos en JavaScript.
+Este proyecto continúa el desarrollo del repositorio **web_project_around** y se centra en **conectar la aplicación al servidor**, permitiendo guardar y recuperar información de usuario y tarjetas de manera dinámica.
 
 ## Descripción
 
-La aplicación muestra un perfil de usuario y una galería de tarjetas con imágenes.  
-En este sprint, se ha reestructurado el código para mejorar su mantenibilidad, modularidad y escalabilidad, implementando nuevas clases para manejar secciones, popups, formularios y datos de usuario.
+La aplicación muestra un perfil de usuario y una galería de tarjetas con imágenes  
+En este sprint, el proyecto se conecta a un servidor remoto para **persistir los datos**, lo que permite cargar la información del usuario, mostrar tarjetas iniciales, agregar nuevas tarjetas, dar "me gusta" y eliminar tarjetas de manera segura mediante popups de confirmación
 
 ## Funcionalidad principal
 
-- Mostrar y actualizar información del usuario.
-- Renderizar una lista de tarjetas dinámicamente.
-- Abrir imágenes en un popup ampliado.
-- Manejar popups con formularios para edición y creación.
-- Cerrar popups con clics externos y tecla Esc.
+- Cargar y actualizar información del usuario desde/hacia el servidor
+- Renderizar tarjetas dinámicamente obtenidas desde el servidor
+- Agregar nuevas tarjetas y guardarlas en el servidor
+- Dar y quitar "me gusta" en las tarjetas con actualización en tiempo real
+- Eliminar tarjetas con confirmación mediante un popup
+- Abrir imágenes en un popup ampliado
+- Gestionar popups con formularios para edición, creación y actualización de avatar
+- Cerrar popups con clics externos y tecla Esc
+- Indicadores de carga de datos (ej. botones muestran "Guardando..." mientras se procesa la solicitud)
 
 ## Tecnologías y técnicas utilizadas
 
-- **HTML5** para la estructura.
-- **CSS3** con metodología BEM para el estilo.
-- **JavaScript (ES6+)** con Programación Orientada a Objetos.
-- Módulos de ES6 para organización del código.
-- Uso de **Git** y **GitHub** con flujo de trabajo basado en ramas.
-- **GitHub Pages** para despliegue.
+- HTML5 para la estructura
+- CSS3 con metodología BEM para el estilo y responsive design
+- JavaScript (ES6+) con Programación Orientada a Objetos
+- Módulos ES6 para organización del código
+- Fetch API para comunicación con el servidor remoto
+- Git y GitHub con flujo de trabajo basado en ramas
+- GitHub Pages para despliegue
 
 ## Estructura de clases
 
-- `Section` – Renderiza listas de elementos en la página.
-- `Popup` – Controla apertura y cierre de ventanas modales.
-- `PopupWithImage` – Muestra imágenes ampliadas.
-- `PopupWithForm` – Gestiona formularios dentro de popups.
-- `UserInfo` – Maneja la información del usuario.
-- `Card` – Representa cada tarjeta con imagen y título.
+- Api – Gestiona todas las solicitudes al servidor (GET, POST, PATCH, DELETE, PUT)
+- Section – Renderiza listas de elementos en la página
+- Popup – Controla apertura y cierre de ventanas modales
+- PopupWithImage – Muestra imágenes ampliadas
+- PopupWithForm – Gestiona formularios dentro de popups
+- PopupWithConfirmation – Maneja popups de confirmación para eliminar tarjetas
+- UserInfo – Maneja la información del usuario y la mantiene sincronizada con el servidor
+- Card – Representa cada tarjeta con imagen, título, like y funcionalidad de eliminación
 
 ## Enlace a GitHub Pages
 
