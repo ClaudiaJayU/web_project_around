@@ -18,8 +18,8 @@ const config = {
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__save-btn",
   inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
+  inputErrorClass: ".popup__input_type_error",
+  errorClass: ".popup__error_visible",
 };
 
 // ---------------- INSTANCIAS GLOBALES ----------------
@@ -43,17 +43,18 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, initialCards]) => {
     currentUserId = userData._id;
 
-    // Setea datos del perfil en el DOM
     userInfo.setUserInfo({
       name: userData.name,
       about: userData.about,
       avatar: userData.avatar,
     });
 
-    // Renderiza tarjetas
+    // Invertimos el array para que las tarjetas más nuevas aparezcan primero
+    const cardsInverted = initialCards.reverse();
+
     section = new Section(
       {
-        items: initialCards,
+        items: cardsInverted,
         renderer: (item) => {
           const cardElement = createNewPost(item);
           section.addItem(cardElement);
@@ -69,35 +70,33 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
 // ---------------- HELPERS ----------------
 function handleDeleteCard(cardId, cardElement) {
   api
-    .deleteCard(cardId) // llama a la API para eliminar
-    .then(() => {
-      cardElement.remove(); // elimina del DOM
-    })
+    .deleteCard(cardId)
+    .then(() => cardElement.remove())
     .catch((err) => console.log("❌ Error al eliminar tarjeta:", err));
 }
 
 function createNewPost(cardData) {
   const card = new Card(
-    cardData, // objeto completo de la API
-    "#card-template", // template selector
+    cardData,
+    "#card-template",
     popupWithImage,
-    handleDeleteCard, // popup de imagen
-    currentUserId // ID del usuario actual
+    handleDeleteCard,
+    currentUserId
   );
-
   return card.generateCard();
 }
 
 // ---------------- VALIDACIÓN FORMULARIOS ----------------
-const forms = document.querySelectorAll(config.formSelector);
-forms.forEach((formElement) => {
+document.querySelectorAll(config.formSelector).forEach((formElement) => {
   const validator = new FormValidator(config, formElement);
   validator.enableValidation();
 });
 
 // ---------------- POPUPS ----------------
+
+// Editar perfil
 const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
-  editProfilePopup.renderLoading(true);
+  editProfilePopup.renderLoading(true, "Guardando...");
   api
     .setUserInfo({ name: formData.name, about: formData.about })
     .then((updatedUser) => {
@@ -109,31 +108,51 @@ const editProfilePopup = new PopupWithForm("#user-popup", (formData) => {
       editProfilePopup.close();
     })
     .catch((err) => console.log("❌ Error al actualizar usuario:", err))
-    .finally(() => editProfilePopup.renderLoading(false));
+    .finally(() => editProfilePopup.renderLoading(false, "Guardar"));
 });
 editProfilePopup.setEventListeners();
 
+// Agregar tarjeta
 const addCardPopup = new PopupWithForm("#newpost-popup", (formData) => {
-  addCardPopup.renderLoading(true);
-
+  addCardPopup.renderLoading(true, "Guardando...");
   api
     .addCard({ name: formData.title, link: formData.link })
     .then((newCard) => {
       const cardElement = createNewPost(newCard);
-      section.addItem(cardElement);
+      section.addItem(cardElement); // siempre al inicio
       addCardPopup.close();
     })
     .catch((err) => console.log("❌ Error al agregar tarjeta:", err))
-    .finally(() => addCardPopup.renderLoading(false));
+    .finally(() => addCardPopup.renderLoading(false, "Guardar"));
 });
 addCardPopup.setEventListeners();
+
+// Cambiar avatar
+const updateAvatarPopup = new PopupWithForm("#avatar-popup", (formData) => {
+  updateAvatarPopup.renderLoading(true, "Guardando...");
+  api
+    .updateAvatar(formData.avatar)
+    .then((updatedUser) => {
+      userInfo.setUserInfo({
+        name: updatedUser.name,
+        about: updatedUser.about,
+        avatar: updatedUser.avatar,
+      });
+      updateAvatarPopup.close();
+    })
+    .catch((err) => console.log("❌ Error al actualizar avatar:", err))
+    .finally(() => updateAvatarPopup.renderLoading(false, "Guardar"));
+});
+updateAvatarPopup.setEventListeners();
 
 // ---------------- BOTONES ----------------
 const editProfileButton = document.querySelector("#profile-edit-btn");
 const addCardButton = document.querySelector("#add-post-btn");
+const editAvatarButton = document.querySelector("#avatar-edit-btn");
 const formName = document.querySelector("#user-name-input");
 const formAbout = document.querySelector("#user-about-input");
 
+// Abrir popup editar perfil
 editProfileButton.addEventListener("click", () => {
   const currentUser = userInfo.getUserInfo();
   formName.value = currentUser.name;
@@ -141,6 +160,8 @@ editProfileButton.addEventListener("click", () => {
   editProfilePopup.open();
 });
 
-addCardButton.addEventListener("click", () => {
-  addCardPopup.open();
-});
+// Abrir popup agregar tarjeta
+addCardButton.addEventListener("click", () => addCardPopup.open());
+
+// Abrir popup cambiar avatar
+editAvatarButton.addEventListener("click", () => updateAvatarPopup.open());

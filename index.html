@@ -24,7 +24,13 @@
         </header>
         <main>
           <section class="profile">
-            <img src="" class="profile__avatar-image" alt="Avatar usuario" />
+            <div class="profile__avatar-container" id="avatar-edit-btn">
+              <img src="" class="profile__avatar-image" alt="Avatar usuario" />
+              <div class="profile__avatar-overlay">
+                <img src="./images/edit-pencil.svg" alt="Editar avatar" />
+              </div>
+            </div>
+
             <div class="profile__info">
               <div class="profile__name">
                 <p class="profile__name-text"></p>
@@ -44,6 +50,42 @@
                 alt="Imagen boton para agregar post"
               />
             </button>
+            <div class="popup" id="avatar-popup">
+              <div class="popup__box">
+                <button
+                  class="popup__close-btn"
+                  id="popup__post-close-btn"
+                  type="button"
+                >
+                  <img
+                    src="./images/close-icon.svg"
+                    alt="Icono para cerrar formulario"
+                  />
+                </button>
+                <form class="popup__form" id="avatar-form">
+                  <h3 class="popup__title">Cambiar foto de perfil</h3>
+
+                  <input
+                    type="url"
+                    name="avatar"
+                    placeholder="Enlace a la imagen"
+                    class="popup__input"
+                    id="url-input"
+                    required
+                  />
+                  <div class="popup__input-validation">
+                    <p class="text-error" id="url-input-error"></p>
+                  </div>
+                  <button
+                    class="popup__save-btn popup__button_disabled"
+                    id="post-save-btn"
+                    type="submit"
+                  >
+                    Guardar
+                  </button>
+                </form>
+              </div>
+            </div>
           </section>
 
           <section class="posts-gallery">

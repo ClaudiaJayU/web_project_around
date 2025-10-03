@@ -81,6 +81,13 @@ class Api {
       return res.status === 204 ? {} : res.json();
     });
   }
+  updateAvatar(avatarUrl) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({ avatar: avatarUrl }),
+    }).then(this._checkResponse);
+  }
 }
 
 export const api = new Api({
