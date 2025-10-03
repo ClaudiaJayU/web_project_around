@@ -7,10 +7,9 @@
   margin-top: 40px;
 }
 
-/* ---------------- AVATAR CON OVERLAY ---------------- */
 .profile__avatar-container {
   position: relative;
-  width: 120px; /* tamaño del avatar */
+  width: 120px;
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
@@ -23,7 +22,7 @@
   border-radius: 50%;
   object-fit: cover;
   display: block;
-  opacity: 1; /* por defecto */
+  opacity: 1;
 }
 
 .profile__avatar-overlay {
@@ -35,25 +34,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0; /* invisible por defecto */
+  opacity: 0;
 }
 
 .profile__avatar-overlay img {
-  width: 30px; /* tamaño del lápiz */
+  width: 30px;
   height: 30px;
-  /* la imagen debe ser blanca */
 }
 
-/* Hover: imagen al 80% y lápiz visible */
 .profile__avatar-container:hover .profile__avatar-image {
-  opacity: 0.2; /* imagen más opaca */
+  opacity: 0.2;
 }
 
 .profile__avatar-container:hover .profile__avatar-overlay {
-  opacity: 1; /* lápiz visible */
+  opacity: 1;
 }
 
-/* ---------------- NOMBRE Y BOTONES ---------------- */
 .profile__name {
   display: flex;
   align-items: center;
@@ -95,7 +91,6 @@
   margin-left: auto;
 }
 
-/* ---------------- MEDIA QUERIES ---------------- */
 @media only screen and (min-width: 544px) and (max-width: 1024px) {
   .profile {
     width: 80%;
@@ -126,6 +121,9 @@
     width: 18px;
     height: 18px;
     padding: 0;
+  }
+  #add-post-btn {
+    margin: auto;
   }
   .profile__edit-btn img {
     width: 100%;

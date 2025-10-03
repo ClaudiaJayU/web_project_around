@@ -1,12 +1,12 @@
 // Imports
 import Section from "../components/Section.js";
-import Popup from "../components/Popup.js";
 import Card from "../components/Card.js";
 import PopupWithImage from "../components/PopupWithImage.js";
-import FormValidator from "../components/FormValidator.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
+import FormValidator from "../components/FormValidator.js";
 import UserInfo from "../components/UserInfo.js";
-import { api } from "../components/Api.js"; // instancia de la API
+import { api } from "../components/Api.js";
 
 // ---------------- VARIABLES GLOBALES ----------------
 let section;
@@ -26,16 +26,73 @@ const config = {
 const popupWithImage = new PopupWithImage("#img-popup");
 popupWithImage.setEventListeners();
 
-const popupUser = new Popup("#user-popup");
+const popupUser = new PopupWithForm("#user-popup", (formData) => {
+  editProfilePopup.renderLoading(true, "Guardando...");
+  api
+    .setUserInfo({ name: formData.name, about: formData.about })
+    .then((updatedUser) => {
+      userInfo.setUserInfo({
+        name: updatedUser.name,
+        about: updatedUser.about,
+        avatar: updatedUser.avatar,
+      });
+      editProfilePopup.close();
+    })
+    .catch((err) => console.log("❌ Error al actualizar usuario:", err))
+    .finally(() => editProfilePopup.renderLoading(false, "Guardar"));
+});
 popupUser.setEventListeners();
 
-const popupNewPost = new Popup("#newpost-popup");
+const popupNewPost = new PopupWithForm("#newpost-popup", (formData) => {
+  addCardPopup.renderLoading(true, "Guardando...");
+  api
+    .addCard({ name: formData.title, link: formData.link })
+    .then((newCard) => {
+      const cardElement = createNewPost(newCard);
+      section.addItem(cardElement, true);
+      addCardPopup.close();
+    })
+    .catch((err) => console.log("❌ Error al agregar tarjeta:", err))
+    .finally(() => addCardPopup.renderLoading(false, "Guardar"));
+});
 popupNewPost.setEventListeners();
 
 const userInfo = new UserInfo({
   nameSelector: ".profile__name-text",
   aboutSelector: ".profile__about",
   avatarSelector: ".profile__avatar-image",
+});
+
+// ---------------- HELPERS ----------------
+function handleDeleteCard(cardId, cardElement) {
+  api
+    .deleteCard(cardId)
+    .then(() => cardElement.remove())
+    .catch((err) => console.log("❌ Error al eliminar tarjeta:", err));
+}
+
+function createNewPost(cardData) {
+  const card = new Card(
+    cardData,
+    "#card-template",
+    popupWithImage,
+    (cardId, cardElement) => confirmPopup.open(cardId, cardElement), // abrir popup de confirmación
+    currentUserId
+  );
+  return card.generateCard();
+}
+
+// ---------------- POPUP CONFIRMACIÓN ----------------
+const confirmPopup = new PopupWithConfirmation(
+  "#confirm-popup",
+  handleDeleteCard
+);
+confirmPopup.setEventListeners();
+
+// ---------------- VALIDACIÓN FORMULARIOS ----------------
+document.querySelectorAll(config.formSelector).forEach((formElement) => {
+  const validator = new FormValidator(config, formElement);
+  validator.enableValidation();
 });
 
 // ---------------- API CALLS ----------------
@@ -49,7 +106,6 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
       avatar: userData.avatar,
     });
 
-    // Invertimos el array para que las tarjetas más nuevas aparezcan primero
     const cardsInverted = initialCards.reverse();
 
     section = new Section(
@@ -66,31 +122,6 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     section.renderItems();
   })
   .catch((err) => console.log("❌ Error en carga inicial:", err));
-
-// ---------------- HELPERS ----------------
-function handleDeleteCard(cardId, cardElement) {
-  api
-    .deleteCard(cardId)
-    .then(() => cardElement.remove())
-    .catch((err) => console.log("❌ Error al eliminar tarjeta:", err));
-}
-
-function createNewPost(cardData) {
-  const card = new Card(
-    cardData,
-    "#card-template",
-    popupWithImage,
-    handleDeleteCard,
-    currentUserId
-  );
-  return card.generateCard();
-}
-
-// ---------------- VALIDACIÓN FORMULARIOS ----------------
-document.querySelectorAll(config.formSelector).forEach((formElement) => {
-  const validator = new FormValidator(config, formElement);
-  validator.enableValidation();
-});
 
 // ---------------- POPUPS ----------------
 
@@ -119,7 +150,7 @@ const addCardPopup = new PopupWithForm("#newpost-popup", (formData) => {
     .addCard({ name: formData.title, link: formData.link })
     .then((newCard) => {
       const cardElement = createNewPost(newCard);
-      section.addItem(cardElement); // siempre al inicio
+      section.addItem(cardElement, true);
       addCardPopup.close();
     })
     .catch((err) => console.log("❌ Error al agregar tarjeta:", err))
